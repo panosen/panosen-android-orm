@@ -4,11 +4,6 @@ plugins {
     id 'signing'
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 signing {
     sign publishing.publications.mavenJava
 }
@@ -26,8 +21,6 @@ publishing {
                         .appendNode('artifactId', 'super-pom').parent()
                         .appendNode('version', "1.6.0")
             }
-
-            from components.java
 
             versionMapping {
                 usage('java-api') {
