@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
 }
 
 android {
@@ -37,4 +39,71 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+afterEvaluate {
+
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+
+                group = 'com.panosen'
+                artifactId = 'android-orm'
+                version = '0.1.0'
+
+                pom.withXml {
+                    asNode().appendNode('parent')
+                            .appendNode('groupId', 'com.panosen').parent()
+                            .appendNode('artifactId', 'super-pom').parent()
+                            .appendNode('version', "1.6.0")
+                }
+
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+
+                pom {
+                    name = 'Panosen Android Orm'
+                    description = 'Panosen Android Orm for sqlite'
+                    url = 'https://github.com/panosen/panosen-android-orm'
+//                    properties = [
+//                            myProp          : "value",
+//                            "prop.with.dots": "anotherValue"
+//                    ]
+                    licenses {
+                        license {
+                            name = 'MIT'
+                            url = 'https://github.com/panosen/panosen-android-orm/blob/master/LICENSE'
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = 'sonatype'
+                url 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                credentials {
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
+                }
+            }
+        }
+    }
+
+    signing {
+        def signingId = System.getenv('MAVEN_GPG_ID')
+        def signingKey = System.getenv('MAVEN_GPG_PRIVATE_KEY')
+        def signingPassword = System.getenv('MAVEN_GPG_PASSPHRASE')
+        useInMemoryPgpKeys(signingId, signingKey, signingPassword)
+        sign publishing.publications.release
+    }
 }
