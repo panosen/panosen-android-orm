@@ -42,6 +42,15 @@ dependencies {
 }
 
 afterEvaluate {
+
+    signing {
+        def signingId = System.getenv('MAVEN_GPG_ID')
+        def signingKey = System.getenv('MAVEN_GPG_PRIVATE_KEY')
+        def signingPassword = System.getenv('MAVEN_GPG_PASSPHRASE')
+        useInMemoryPgpKeys(signingId, signingKey, signingPassword)
+        sign publishing.publications.release
+    }
+    
     publishing {
         publications {
             // Creates a Maven publication called "release".
@@ -96,13 +105,5 @@ afterEvaluate {
                 }
             }
         }
-    }
-
-    signing {
-        def signingId = System.getenv('MAVEN_GPG_ID')
-        def signingKey = System.getenv('MAVEN_GPG_PRIVATE_KEY')
-        def signingPassword = System.getenv('MAVEN_GPG_PASSPHRASE')
-        useInMemoryPgpKeys(signingId, signingKey, signingPassword)
-        sign publishing.publications.release
     }
 }
