@@ -190,7 +190,10 @@ public class SelectTask extends SingleTask {
     private static Map<String, Integer> buildIndexMap(Cursor cursor, EntityManager entityManager) {
         Map<String, Integer> indexMap = new HashMap<>();
         for (Map.Entry<String, EntityColumn> entry : entityManager.getColumnMap().entrySet()) {
-            indexMap.putIfAbsent(entry.getKey(), cursor.getColumnIndex(entry.getKey()));
+            if (!indexMap.containsKey(entry.getKey())) {
+                indexMap.put(entry.getKey(), cursor.getColumnIndex(entry.getKey()));
+            }
+
         }
         return indexMap;
     }

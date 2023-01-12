@@ -55,7 +55,9 @@ public class EntityManager {
                 entityColumn.setColumnName(column.name());
                 entityColumn.setLocalType(type.type());
                 entityColumn.setField(field);
-                columnNames.putIfAbsent(column.name(), entityColumn);
+                if(!columnNames.containsKey(column.name())){
+                    columnNames.put(column.name(), entityColumn);
+                }
             }
 
             currentClass = currentClass.getSuperclass();
