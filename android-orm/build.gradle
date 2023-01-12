@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'maven-publish'
+    id 'signing'
 }
 
 android {
@@ -88,12 +89,20 @@ afterEvaluate {
         repositories {
             maven {
                 name = 'sonatype'
-                url  'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                url 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
                 credentials {
                     username = System.getenv('MAVEN_USERNAME')
                     password = System.getenv('MAVEN_PASSWORD')
                 }
             }
         }
+    }
+
+    signing {
+        def signingId = System.getenv('MAVEN_GPG_ID')
+        def signingKey = System.getenv('MAVEN_GPG_PRIVATE_KEY')
+        def signingPassword = System.getenv('MAVEN_GPG_PASSPHRASE')
+        useInMemoryPgpKeys(signingId, signingKey, signingPassword)
+        sign publishing.publications.release
     }
 }
