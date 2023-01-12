@@ -1,5 +1,60 @@
 plugins {
     id 'com.android.library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            group = 'com.panosen'
+            artifactId = 'android-orm'
+            version = '0.1.0'
+
+            pom.withXml {
+                asNode().appendNode('parent')
+                        .appendNode('groupId', 'com.panosen').parent()
+                        .appendNode('artifactId', 'super-pom').parent()
+                        .appendNode('version', "1.6.0")
+            }
+
+            from components.java
+
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+
+            pom {
+                name = 'Panosen Android Orm'
+                description = 'Panosen Android Orm for sqlite'
+                url = 'https://github.com/panosen/panosen-android-orm'
+                properties = [
+                        myProp: "value",
+                        "prop.with.dots": "anotherValue"
+                ]
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://github.com/panosen/panosen-android-orm/blob/master/LICENSE'
+                    }
+                }
+            }
+        }
+    }
 }
 
 android {
