@@ -24,7 +24,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew :android:build
 
     # Packages and publishes to Maven Central
     - name: Publish to Maven Central
