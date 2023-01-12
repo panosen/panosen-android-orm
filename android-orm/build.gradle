@@ -90,8 +90,8 @@ afterEvaluate {
                 name = 'sonatype'
                 url  'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
                 credentials {
-                    username = ${{ secrets.MAVEN_USERNAME }}
-                    password = ${{ secrets.MAVEN_PASSWORD }}
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
                 }
             }
         }
