@@ -3,48 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            group = 'com.panosen'
-            artifactId = 'android-orm'
-            version = '0.1.0'
-
-            pom.withXml {
-                asNode().appendNode('parent')
-                        .appendNode('groupId', 'com.panosen').parent()
-                        .appendNode('artifactId', 'super-pom').parent()
-                        .appendNode('version', "1.6.0")
-            }
-
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
-            }
-
-            pom {
-                name = 'Panosen Android Orm'
-                description = 'Panosen Android Orm for sqlite'
-                url = 'https://github.com/panosen/panosen-android-orm'
-                properties = [
-                        myProp: "value",
-                        "prop.with.dots": "anotherValue"
-                ]
-                licenses {
-                    license {
-                        name = 'MIT'
-                        url = 'https://github.com/panosen/panosen-android-orm/blob/master/LICENSE'
-                    }
-                }
-            }
-        }
-    }
-}
-
 android {
     namespace 'com.panosen.android.orm'
     compileSdk 32
@@ -80,4 +38,50 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.release
+
+                group = 'com.panosen'
+                artifactId = 'android-orm'
+                version = '0.1.0'
+
+                pom.withXml {
+                    asNode().appendNode('parent')
+                            .appendNode('groupId', 'com.panosen').parent()
+                            .appendNode('artifactId', 'super-pom').parent()
+                            .appendNode('version', "1.6.0")
+                }
+
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+
+                pom {
+                    name = 'Panosen Android Orm'
+                    description = 'Panosen Android Orm for sqlite'
+                    url = 'https://github.com/panosen/panosen-android-orm'
+//                    properties = [
+//                            myProp          : "value",
+//                            "prop.with.dots": "anotherValue"
+//                    ]
+                    licenses {
+                        license {
+                            name = 'MIT'
+                            url = 'https://github.com/panosen/panosen-android-orm/blob/master/LICENSE'
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
