@@ -43,7 +43,8 @@ dependencies {
 afterEvaluate {
     publishing {
         publications {
-            mavenJava(MavenPublication) {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
                 from components.release
 
                 group = 'com.panosen'

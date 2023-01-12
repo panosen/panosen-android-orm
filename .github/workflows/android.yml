@@ -22,5 +22,17 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
     - name: Build with Gradle
       run: ./gradlew build
+
+    # Packages and publishes to Maven Central
+    - name: Publish to Maven Central
+      run: ./gradlew :android-orm:publishReleasePublicationToSonatypeRepository --max-workers 1 --stacktrace --no-daemon
+      env:
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+        SONATYPE_STAGING_PROFILE_ID: ${{ secrets.SONATYPE_STAGING_PROFILE_ID }}
