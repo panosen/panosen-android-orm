@@ -28,7 +28,7 @@ jobs:
 
     # Packages and publishes to Maven Central
     - name: Publish to Maven Central
-      run: ./gradlew :android-orm:publishReleasePublicationToSonatypeRepository :android-orm:closeAndReleaseSonatypeStagingRepository --max-workers 1 --stacktrace --no-daemon
+      run: ./gradlew :android-orm:publishReleasePublicationToSonatypeRepository closeAndReleaseSonatypeStagingRepository --max-workers 1 --stacktrace --no-daemon
       env:
         MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
