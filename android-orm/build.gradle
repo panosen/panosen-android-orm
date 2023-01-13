@@ -49,9 +49,9 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                group = 'com.panosen'
+                group = MAVEN_PUBLICATION_GROUP
                 artifactId = 'android-orm'
-                version = '0.1.0'
+                version = MAVEN_PUBLICATION_VERSION
 
                 pom.withXml {
                     asNode().appendNode('parent')
