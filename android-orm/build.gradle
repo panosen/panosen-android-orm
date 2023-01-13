@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'maven-publish'
     id 'signing'
+    id 'io.github.gradle-nexus.publish-plugin'
 }
 
 android {
@@ -39,6 +40,16 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+ nexusPublishing {
+     repositories {
+         sonatype {
+             nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
+             username = System.getenv('MAVEN_USERNAME')
+             password = System.getenv('MAVEN_PASSWORD')
+         }
+     }
 }
 
 afterEvaluate {
